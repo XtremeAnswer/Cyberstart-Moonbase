@@ -1,0 +1,25 @@
+#
+# Sample Alien Zip file found at /tmp/alien-zip-2092.zip is password protected
+# We have worked out they are using three digit code
+# Brute force the Zip file to extract to /tmp
+#
+# Note: The script can timeout if this occurs try narrowing
+# down your search
+import zipfile
+
+zip_file_path = '/tmp/alien-zip-2092.zip'
+password_file_path = '/tmp/alien-zip-2092.txt'
+
+for i in range(1000):
+    password = f'{i:03}'
+    try:
+        with zipfile.ZipFile(zip_file_path, 'r') as zip_file:
+            zip_file.extractall('/tmp', pwd=password.encode())
+        print(f'Successfully extracted with password: {password}')
+        break
+    except:
+        continue
+
+with open(password_file_path, 'r') as f:
+    contents = f.read()
+    print(contents)
