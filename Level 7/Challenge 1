@@ -1,0 +1,24 @@
+#
+# Find the valid png file in the /tmp directory using magic bytes.
+# The code is hidden in this file.
+#
+import os
+
+dir_path = '/tmp'
+
+# Loop over files in the directory
+for file_name in os.listdir(dir_path):
+    file_path = os.path.join(dir_path, file_name)
+    
+    # Check if file is a PNG file
+    if file_name.endswith('.png'):
+        
+        # Read the file contents
+        with open(file_path, 'rb') as f:
+            file_content = f.read()
+        
+        # Check the file header (magic bytes)
+        if file_content[:8] == b'\x89PNG\r\n\x1a\n':
+            # Print the contents of the file
+            print(file_content)
+            break
