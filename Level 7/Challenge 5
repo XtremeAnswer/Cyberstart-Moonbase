@@ -1,0 +1,25 @@
+#
+# We need you to send a spoofed email.
+# Use smtp server at '127.0.0.1', port 1025.
+# Author needs to be bob-roswell-1947@gmail.com
+# Recipient needs to be zultron@thebigeye.com
+#
+import smtplib
+from email.mime.text import MIMEText
+
+FROM = 'bob-roswell-1947@gmail.com'
+TO = 'zultron@thebigeye.com'
+SUBJECT = 'Confusing email'
+BODY = 'Hello Zultron, we have detected an error in the attack timings. Please disregard previous email.'
+
+# Create a message object and set its attributes
+message = MIMEText(BODY)
+message['From'] = FROM
+message['To'] = TO
+message['Subject'] = SUBJECT
+
+# Connect to the SMTP server and send the email
+with smtplib.SMTP('127.0.0.1', 1025) as smtp:
+    smtp.send_message(message)
+
+print('Email sent successfully!')
