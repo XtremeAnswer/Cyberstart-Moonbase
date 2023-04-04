@@ -1,0 +1,42 @@
+#
+# The aliens seem to be trying to make direct contact, so it's time
+# for us to properly listen.
+# Write a server that listens on ('localhost', 10000).
+# The flag will be sent to that address.
+# Record signal to /tmp/aliensignallog.txt
+#
+# If you get an address already in use error then try again in a few
+# moments.
+#
+
+import socket
+
+def debugMsg(msg):
+  # Use this function if you need any debug messages
+  with open("/tmp/userdebug.log", "a") as myfile:
+    myfile.write(msg + "\n")
+
+def handle_connection(conn, addr):
+  debugMsg("Connection from {}".format(addr))
+  with open("/tmp/aliensignallog.txt", "w") as signalfile:
+    while True:
+      data = conn.recv(1024)
+      if not data:
+        break
+      signalfile.write(data.decode())
+      conn.sendall(b"Signal received\n")
+  conn.close()
+
+def start_server():
+  host = "localhost"
+  port = 10000
+  backlog = 5
+  with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+    s.bind((host, port))
+    s.listen(backlog)
+    debugMsg("Server listening on {}:{}".format(host, port))
+    while True:
+      conn, addr = s.accept()
+      handle_connection(conn, addr)
+
+start_server()
