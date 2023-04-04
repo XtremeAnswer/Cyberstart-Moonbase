@@ -1,0 +1,14 @@
+#
+# Find the file in the alien directories in /tmp/aliendir to get the flag
+#
+import os
+
+def browse_dir(path):
+    for entry in os.scandir(path):
+        if entry.is_file():
+            print("Found file:", entry.name)
+        elif entry.is_dir():
+            print("Entering directory:", entry.name)
+            browse_dir(entry.path)
+
+browse_dir("/tmp/aliendir")
