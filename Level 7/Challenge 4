@@ -1,0 +1,13 @@
+#
+# One of the agents has intercepted a file from the aliens
+# The flag is hidden in large amount of non alphanumeric characters.
+# The file lives at /tmp/destroymoonbase.gif
+#
+import re
+
+with open('/tmp/destroymoonbase.gif', 'rb') as f:
+    file_content = f.read()
+
+stripped_content = re.sub(rb'[^a-zA-Z0-9]', b'', file_content)
+
+print(stripped_content.decode())
