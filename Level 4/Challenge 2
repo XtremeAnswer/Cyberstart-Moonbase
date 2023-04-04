@@ -1,0 +1,22 @@
+#
+# Fix the below script to read from each agent file found in /tmp.
+# Example agent profile would be /tmp/agent-1.txt
+# The contents of each of the agent files makes up the flag
+#
+
+
+import os
+
+count = 1
+flag = ''
+
+while True:
+    fname = f'/tmp/agent-{count}.txt'
+    if os.path.isfile(fname):
+        with open(fname, 'r') as f:
+            flag += f.read().strip()
+        count += 1
+    else:
+        break
+
+print(flag)
