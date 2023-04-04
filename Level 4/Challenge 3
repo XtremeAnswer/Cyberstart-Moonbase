@@ -1,0 +1,66 @@
+#
+#  Robot Control Map
+#
+#  +-------------------+
+# 9|                   |
+# 8|S                  |
+# 7|            x x x x|
+# 6|            x      |
+# 5|            x F    |
+# 4|                   |
+# 3|                   |
+# 2|                   |
+# 1|                   |
+# 0|                   |
+#  +-------------------+
+#   0 1 2 3 4 5 6 7 8 9
+#
+#  S = Start position (0,8) F = Target destination (7,5),
+#  x = Ravine, robot will be lost if hits these coords
+#
+# import robot module and use the robot.left(), robot.right(),
+# robot.up() and robot.down() functions
+#
+import robot
+
+blockedCoords = [[6,5], [6,6], [6,7], [7,7], [8,7], [9,7]]
+start = (0,8)
+finish = (7,5)
+
+def is_valid(x, y):
+    return 0 <= x <= 9 and 0 <= y <= 9 and [x, y] not in blockedCoords
+
+def navigate():
+    queue = [(0, start[0], start[1], [])]
+    visited = set()
+    
+    while queue:
+        steps, x, y, path = queue.pop(0)
+        
+        if (x, y) == finish:
+            for direction in path:
+                if direction == "right":
+                    robot.right()
+                elif direction == "left":
+                    robot.left()
+                elif direction == "up":
+                    robot.up()
+                elif direction == "down":
+                    robot.down()
+            return path
+        
+        if (x, y) not in visited:
+            visited.add((x, y))
+            
+            if is_valid(x-1, y):
+                queue.append((steps+1, x-1, y, path + ["left"]))
+            if is_valid(x+1, y):
+                queue.append((steps+1, x+1, y, path + ["right"]))
+            if is_valid(x, y-1):
+                queue.append((steps+1, x, y-1, path + ["down"]))
+            if is_valid(x, y+1):
+                queue.append((steps+1, x, y+1, path + ["up"]))
+        
+    return None
+
+navigate()
