@@ -1,0 +1,43 @@
+#
+# Setup server listening on ('localhost', 10000)
+# receive data then send data back after XORing with the key
+# attackthehumans
+#
+# If you get an address already in use error then try again in a few
+# moments.
+#
+import socket
+
+HOST = 'localhost'
+PORT = 10000
+KEY = 'attackthehumans'
+
+def xor_encrypt(msg, key):
+    encrypted = bytearray()
+    for i, c in enumerate(msg):
+        encrypted.append(c ^ ord(key[i % len(key)]))
+    return encrypted
+
+def main():
+    # set up the server socket
+    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+        s.bind((HOST, PORT))
+        s.listen()
+
+        # wait for a connection
+        conn, addr = s.accept()
+        with conn:
+            print('Connected by', addr)
+
+            # receive the message
+            data = conn.recv(1024)
+            print('Received', data)
+
+            # encrypt the message and send it back
+            encrypted_data = xor_encrypt(data, KEY)
+            print('Encrypted', encrypted_data)
+            conn.sendall(encrypted_data)
+
+if __name__ == '__main__':
+    main()
+# IF ADDRESS ALREADY IN USE, TRY AGAIN LATER! IT WORKS CORRECTLY!
